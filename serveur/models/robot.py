@@ -12,9 +12,11 @@ class Robot:
     posX = 1
     posY = 1
 
-    def __init__(self, name):
+    def __init__(self, name, x, y):
         #self.status = const.PLAYER_CONNECTED
         self.name = name
+        self.posX = x
+        self.posY = y
 
     # def disconnect(self):
     #     self.status = const.PLAYER_DISCONNECTED

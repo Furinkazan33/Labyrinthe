@@ -10,6 +10,7 @@ class Carte:
     nom = ""
     chaine = ""
     content = []
+    free = []
 
     def _strToLab (self, chaine):
         """ Convertit une chaîne en carte (liste de liste)."""
@@ -25,6 +26,10 @@ class Carte:
                 ligne = []
                 j+=1
                 i=0
+            elif chaine[c] == ' ':
+                self.free.append((i, j))
+                ligne.append(chaine[c])
+                i+=1
             else:
                 ligne.append(chaine[c])
                 i+=1

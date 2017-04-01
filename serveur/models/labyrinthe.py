@@ -3,6 +3,7 @@
 """ Ce fichier contient la classe Labyrinthe.
 
 """
+import random
 import const
 from .robot import Robot
 from .carte import Carte
@@ -19,7 +20,10 @@ class Labyrinthe:
         return self.carte
 
     def add_robot (self, name):
-        self.robots[name] = Robot(name)
+        free = self.carte.free
+        rand = random.randint(0, len(free)-1)
+        (x, y) = free[rand]
+        self.robots[name] = Robot(name, x, y)
 
     def get_robot (self, name):
         return self.robots[name]

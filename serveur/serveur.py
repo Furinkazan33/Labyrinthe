@@ -123,7 +123,6 @@ if __name__ == "__main__":
                 if reponse["type"] == const.SOCKET_CLIENT_NAME:
                     name = reponse["infos"]
                     client.set_name(name)
-                    game.labyrinthe.add_robot(name)
                     client.send(const.SOCKET_SERVER_ANSWER_NAME, {}, "Bienvenue " + name)
                     client.send(const.SOCKET_SERVER_ASK_CHOOSE_MAP, "Veuillez choisir une carte", game.get_maps())
 
@@ -131,6 +130,7 @@ if __name__ == "__main__":
                     #client.send(const.SOCKET_SERVER_ANSWER_CHOOSE_MAP, {}, "Vous avez choisi " + reponse["infos"])
                     #TODO: cela écrase le choix du précédent joueur
                     game.set_map(int(reponse["infos"]))
+                    game.labyrinthe.add_robot(client.get_name())
 
                     client.send(const.SOCKET_SERVER_ASK_MOVE, game.labyrinthe.to_dic(), "")
 
