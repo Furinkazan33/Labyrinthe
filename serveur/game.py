@@ -1,19 +1,15 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
 
-"""Ce fichier contient le code principal du jeu.
+"""Ce fichier contient le code principal du jeu - classe Game.
 
     Il est utilisé par le serveur.
-    Le jeu et le serveur communiquent entre eux via un fichier.
 
 """
-from models import *
-# .carte import *
-# from models.labyrinthe import *
-# from models.robot import *
 import os
 import sys
 import const
+from models import *
 
 class Game():
 

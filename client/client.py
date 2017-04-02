@@ -83,12 +83,6 @@ if __name__ == "__main__":
             name = input(const.PROMPT)
             send(const.SOCKET_CLIENT_NAME, name)
 
-        elif reponse["type"] == const.SOCKET_SERVER_ASK_CHOOSE_MAP:
-            print(reponse["message"])
-            print(reponse["infos"])
-            choix = input(const.PROMPT)
-            send(const.SOCKET_CLIENT_CHOOSE_MAP, choix)
-
         elif reponse["type"] == const.SOCKET_SERVER_ASK_MOVE or reponse["type"] == const.SOCKET_SERVER_ANSWER_MOVE:
             print(chaine_robot(reponse["infos"]["carte"]["chaine"], reponse["infos"]["robots"]))
             print(reponse["message"])
@@ -115,9 +109,6 @@ if __name__ == "__main__":
         # Les réponses du serveur
         #
         elif reponse["type"] == const.SOCKET_SERVER_ANSWER_NAME:
-            print(reponse["message"])
-
-        elif reponse["type"] == const.SOCKET_SERVER_ANSWER_CHOOSE_MAP:
             print(reponse["message"])
 
         elif reponse["type"] == const.SOCKET_SERVER_ANSWER_MOVE:

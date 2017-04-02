@@ -1,69 +1,33 @@
 #!/usr/bin/python3
 # -*-coding:utf-8 -*
 
-"""module multipli contenant la fonction table"""
-
-class Client():
-    _socket = None
-    _name = ""
-    _id = None
-
-    def __init__(self, socket):
-        self._socket = socket
-        self._id = socket.fileno()
-
-    def set_name(self, name):
-        self._name = name
-
-    def get_socket(self):
-        return self._socket
-
-    def get_name(self):
-        return self._name
-
-    def get_id(self):
-        return self._id
-
-    def disconnect(self):
-        self._socket.close()
-        del(self._socket)
-
-    def send (self, m_type, infos, message):
-        dictionnaire = {'type': m_type, 'infos': infos, 'message': message}
-        msg = json.dumps(dictionnaire)
-        msg_a_envoyer = msg.encode()
-
-        print("Envoyé {}".format(msg_a_envoyer), file=sys.stdout)
-
-        self._socket.send(msg_a_envoyer)
-
-    def get (self):
-        msg_recu = self._socket.recv(1024)
-        # Peut planter si le message contient des caractères spéciaux
-        dictionnaire = json.loads(msg_recu.decode())
-
-        print("Reçu {}".format(dictionnaire), file=sys.stdout)
-
-        return dictionnaire
+"""Fichier a exécuter pour lancer le serveur"""
 
 
 if __name__ == "__main__":
     import const
     import socket
-    import json
     import select
     import sys
-    #import modules.th_read
+    from client import Client
     from game import Game
 
-    #sys.stdout = open('write2game', 'w')
-    #sys.stdin = open('write2server', 'r')
+    # TODO:
+    def send_all(clients, m_type, infos, message):
+        for client in clients:
+            client.send(m_type, infos, message)
 
-    #fd = open('write2server', 'r')
-    #th_read = modules.th_read.ReadFromPipe(fd)
-    #th_read.run()
+    def send_other(clients, m_type, infos, message):
+        for client in clients:
+            client.send(m_type, infos, message)
 
+    # On créer la partie
     game = Game()
+
+    # Choix de la carte
+    print("Labyrinthes existants :\n", game.get_maps())
+    choix = input("Entrez un numéro de labyrinthe pour commencer à jouer : ")
+    game.set_map(int(choix))
 
     hote = ''
     port = 12800
@@ -72,7 +36,8 @@ if __name__ == "__main__":
     connexion_principale.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     connexion_principale.bind((hote, port))
     connexion_principale.listen(5)
-    print("Le serveur écoute à présent sur le port {}".format(port), file=sys.stdout)
+    #print("Le serveur écoute à présent sur le port {}".format(port), file=sys.stdout)
+    print("On attend les clients.")
 
     serveur_lance = True
     connexions_demandees = []
@@ -112,9 +77,6 @@ if __name__ == "__main__":
             pass
         else:
             for client in clients_a_lire:
-                #print("Client:", client)
-                #print(client.fileno())
-
                 ##################################
                 # Les réponses du client
                 ##################################
@@ -123,16 +85,10 @@ if __name__ == "__main__":
                 if reponse["type"] == const.SOCKET_CLIENT_NAME:
                     name = reponse["infos"]
                     client.set_name(name)
+                    game.labyrinthe.add_robot(name)
                     client.send(const.SOCKET_SERVER_ANSWER_NAME, {}, "Bienvenue " + name)
-                    client.send(const.SOCKET_SERVER_ASK_CHOOSE_MAP, "Veuillez choisir une carte", game.get_maps())
-
-                elif reponse["type"] == const.SOCKET_CLIENT_CHOOSE_MAP:
-                    #client.send(const.SOCKET_SERVER_ANSWER_CHOOSE_MAP, {}, "Vous avez choisi " + reponse["infos"])
-                    #TODO: cela écrase le choix du précédent joueur
-                    game.set_map(int(reponse["infos"]))
-                    game.labyrinthe.add_robot(client.get_name())
-
                     client.send(const.SOCKET_SERVER_ASK_MOVE, game.labyrinthe.to_dic(), "")
+
 
                 elif reponse["type"] == const.SOCKET_CLIENT_MOVE:
                     (direction, occurence) = reponse["infos"]
