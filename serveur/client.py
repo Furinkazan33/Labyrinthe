@@ -11,10 +11,12 @@ class Client:
     _socket = None
     _name = ""
     _id = None
+    connectes = []
 
     def __init__(self, socket):
         self._socket = socket
         self._id = socket.fileno()
+        self.connectes.append(self)
 
     def set_name(self, name):
         self._name = name
@@ -42,10 +44,28 @@ class Client:
         self._socket.send(msg_a_envoyer)
 
     def get (self):
-        msg_recu = self._socket.recv(1024)
+        msg_recu = self._socket.recv(4096)
         # Peut planter si le message contient des caractères spéciaux
         dictionnaire = json.loads(msg_recu.decode())
 
         print("Reçu {}".format(dictionnaire), file=sys.stdout)
 
         return dictionnaire
+
+    def send_all(self, clients, m_type, infos, message):
+        for client in clients:
+            client.send(m_type, infos, message)
+
+    def send_others(self, all_clients, m_type, infos, message):
+        others = [client for client in all_clients if client!=self]
+
+        for client in others:
+            client.send(m_type, infos, message)
+
+    def ready(self):
+        print("ready")
+        for client in self.connectes:
+            print(client.get_name())
+            if client.get_name() == "":
+                return False
+        return True

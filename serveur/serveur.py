@@ -12,15 +12,6 @@ if __name__ == "__main__":
     from client import Client
     from game import Game
 
-    # TODO:
-    def send_all(clients, m_type, infos, message):
-        for client in clients:
-            client.send(m_type, infos, message)
-
-    def send_other(clients, m_type, infos, message):
-        for client in clients:
-            client.send(m_type, infos, message)
-
     # On créer la partie
     game = Game()
 
@@ -76,6 +67,7 @@ if __name__ == "__main__":
         except select.error:
             pass
         else:
+
             for client in clients_a_lire:
                 ##################################
                 # Les réponses du client
@@ -86,9 +78,8 @@ if __name__ == "__main__":
                     name = reponse["infos"]
                     client.set_name(name)
                     game.labyrinthe.add_robot(name)
-                    client.send(const.SOCKET_SERVER_ANSWER_NAME, {}, "Bienvenue " + name)
-                    client.send(const.SOCKET_SERVER_ASK_MOVE, game.labyrinthe.to_dic(), "")
-
+                    client.send(const.SOCKET_SERVER_MESSAGE, {}, "Bienvenue " + name)
+                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE, {}, name + " vient de se connecter.")
 
                 elif reponse["type"] == const.SOCKET_CLIENT_MOVE:
                     (direction, occurence) = reponse["infos"]
@@ -96,6 +87,7 @@ if __name__ == "__main__":
 
                     if returncode == const.RC_LAB_MOVE_ENDGAME:
                         client.send(const.SOCKET_SERVER_ASK_DISCONNECT, game.labyrinthe.to_dic(), const.STRING_CONGRATS)
+                        client.send_others(clients_connectes, const.SOCKET_SERVER_ASK_DISCONNECT, game.labyrinthe.to_dic(), client.get_name() + " a gagné !")
                     #     exit(0)
 
                     # On s'est prit un mur !
@@ -108,7 +100,8 @@ if __name__ == "__main__":
 
                 elif reponse["type"] == const.SOCKET_CLIENT_DISCONNECT:
                     print("Le client", client.get_name(), "nous a quitté")
-                    client.send(const.SOCKET_SERVER_ANSWER_DISCONNECT, {}, "Au revoir")
+                    client.send(const.SOCKET_SERVER_ANSWER_DISCONNECT, {}, "Au revoir "+client.get_name())
+                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE, {}, client.get_name() + " nous a quitté.")
                     clients_a_lire.remove(client)
                     clients_connectes.remove(client)
                     client.disconnect()
@@ -116,6 +109,11 @@ if __name__ == "__main__":
 
                     if not clients_connectes:
                         serveur_lance = False
+
+                if client.ready():
+                    current = clients_connectes.pop()
+                    clients_connectes.insert(0, current)
+                    current.send(const.SOCKET_SERVER_ASK_MOVE, game.labyrinthe.to_dic(), "")
 
     print("Fermeture des connexions", file=sys.stdout)
     for client in clients_connectes:

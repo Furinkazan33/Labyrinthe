@@ -27,7 +27,7 @@ if __name__ == "__main__":
         connexion_avec_serveur.send(msg_a_envoyer)
 
     def get ():
-        msg_recu = connexion_avec_serveur.recv(1024)
+        msg_recu = connexion_avec_serveur.recv(4096)
         dictionnaire = json.loads(msg_recu.decode())
 
         print("Reçu {}".format(dictionnaire), file=sys.stdout)
@@ -108,7 +108,7 @@ if __name__ == "__main__":
         #
         # Les réponses du serveur
         #
-        elif reponse["type"] == const.SOCKET_SERVER_ANSWER_NAME:
+        elif reponse["type"] == const.SOCKET_SERVER_MESSAGE:
             print(reponse["message"])
 
         elif reponse["type"] == const.SOCKET_SERVER_ANSWER_MOVE:
