@@ -1,19 +1,14 @@
 # -*-coding:Utf-8 -*
 
-""" Ce fichier contient la classe Robot.
-
-"""
-#import const
+""" Ce fichier contient la classe Robot."""
 
 class Robot:
     """ Classe représentant un Robot."""
-    #status = None
     name = ""
     posX = 1
     posY = 1
 
     def __init__(self, name, x, y):
-        #self.status = const.PLAYER_CONNECTED
         self.name = name
         self.posX = x
         self.posY = y

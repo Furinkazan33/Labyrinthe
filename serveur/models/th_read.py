@@ -3,10 +3,8 @@
 """Ce fichier contient la classe ReadFromPipe.
 
 """
-import random
 import sys
 from threading import Thread
-import time
 
 class ReadFromPipe(Thread):
     """Thread chargé de lire le pipe."""

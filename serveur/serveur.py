@@ -3,7 +3,6 @@
 
 """Fichier a exécuter pour lancer le serveur"""
 
-
 if __name__ == "__main__":
     import const
     import socket
@@ -41,8 +40,7 @@ if __name__ == "__main__":
 
         for connexion in connexions_demandees:
             socket, infos = connexion.accept()
-            #print("socket:", socket) #print("infos:", infos)
-
+            
             # Ajout du client à la liste
             client = Client(socket)
             clients_connectes.append(client)
