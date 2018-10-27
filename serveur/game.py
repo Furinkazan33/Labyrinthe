@@ -2,10 +2,8 @@
 # -*-coding:Utf-8 -*
 
 """Ce fichier contient le code principal du jeu - classe Game.
+Il est utilisé par le serveur."""
 
-    Il est utilisé par le serveur.
-
-"""
 import os
 import sys
 import const
