@@ -1,11 +1,10 @@
 # -*-coding:Utf-8 -*
 
-""" Ce fichier contient la classe Client.
-
-"""
+"""Ce fichier contient la classe Client."""
 import socket
 import json
 import sys
+
 
 class Client:
     _socket = None
@@ -13,7 +12,7 @@ class Client:
     _id = None
     connectes = []
 
-    def __init__(self, socket):
+    def __init__(self, socket=socket):
         self._socket = socket
         self._id = socket.fileno()
         self.connectes.append(self)
@@ -34,7 +33,7 @@ class Client:
         self._socket.close()
         del(self._socket)
 
-    def send (self, m_type, infos, message):
+    def send(self, m_type, infos, message):
         dictionnaire = {'type': m_type, 'infos': infos, 'message': message}
         msg = json.dumps(dictionnaire)
         msg_a_envoyer = msg.encode()
@@ -43,7 +42,7 @@ class Client:
 
         self._socket.send(msg_a_envoyer)
 
-    def get (self):
+    def get(self):
         msg_recu = self._socket.recv(4096)
         # Peut planter si le message contient des caractères spéciaux
         dictionnaire = json.loads(msg_recu.decode())
@@ -57,7 +56,7 @@ class Client:
             client.send(m_type, infos, message)
 
     def send_others(self, all_clients, m_type, infos, message):
-        others = [client for client in all_clients if client!=self]
+        others = [client for client in all_clients if client != self]
 
         for client in others:
             client.send(m_type, infos, message)

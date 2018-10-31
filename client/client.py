@@ -15,9 +15,10 @@ if __name__ == "__main__":
 
     connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connexion_avec_serveur.connect((hote, port))
-    print("Connexion établie avec le serveur {} sur le port {}".format(hote, port))
+    print("Connexion établie avec le serveur {} sur le port {}"
+          .format(hote, port))
 
-    def send (m_type, infos):
+    def send(m_type, infos):
         dictionnaire = {'type': m_type, 'infos': infos}
         msg = json.dumps(dictionnaire)
         msg_a_envoyer = msg.encode()
@@ -26,7 +27,7 @@ if __name__ == "__main__":
 
         connexion_avec_serveur.send(msg_a_envoyer)
 
-    def get ():
+    def get():
         msg_recu = connexion_avec_serveur.recv(4096)
         dictionnaire = json.loads(msg_recu.decode())
 
@@ -36,12 +37,12 @@ if __name__ == "__main__":
 
     def close():
         print("Fermeture de la connexion")
-        #connexion_avec_serveur.close()
+        # connexion_avec_serveur.close()
         exit(0)
 
     def is_robot(robots, x, y):
         for name, robot in robots.items():
-            if robot["posX"]==x and robot["posY"]==y:
+            if robot["posX"] == x and robot["posY"] == y:
                 return True
         return False
 
@@ -50,14 +51,13 @@ if __name__ == "__main__":
         client_robot = robots.pop(name)
 
         lab = ""
-        i = 0
-        l = c = 0
+        l = c = i = 0
         while i < len(chaine):
             if chaine[i] == '\n':
                 lab += '\n'
                 c = -1
                 l += 1
-            elif client_robot["posX"]==c and client_robot["posY"]==l:
+            elif client_robot["posX"] == c and client_robot["posY"] == l:
                 lab += 'X'
             elif is_robot(robots, c, l):
                 lab += 'x'
@@ -68,9 +68,9 @@ if __name__ == "__main__":
 
         return lab
 
-
     reponse = {'type': None, 'infos': None, 'message': ""}
-    while reponse["type"] != const.SOCKET_SERVER_ASK_DISCONNECT and reponse["type"] != const.SOCKET_SERVER_ANSWER_DISCONNECT:
+    while reponse["type"] != const.SOCKET_SERVER_ASK_DISCONNECT \
+            and reponse["type"] != const.SOCKET_SERVER_ANSWER_DISCONNECT:
         reponse = get()
         #
         # Les questions du serveur
@@ -83,11 +83,14 @@ if __name__ == "__main__":
             name = input(const.PROMPT)
             send(const.SOCKET_CLIENT_NAME, name)
 
-        elif reponse["type"] == const.SOCKET_SERVER_ASK_MOVE or reponse["type"] == const.SOCKET_SERVER_ANSWER_MOVE:
-            print(chaine_robot(reponse["infos"]["carte"]["chaine"], reponse["infos"]["robots"]))
+        elif reponse["type"] in (const.SOCKET_SERVER_ASK_MOVE,
+                                 const.SOCKET_SERVER_ANSWER_MOVE):
+            print(chaine_robot(reponse["infos"]["carte"]["chaine"],
+                               reponse["infos"]["robots"]))
             print(reponse["message"])
 
-            # Commande joueur, le premier caractère est la direction, le second le nombre de déplacement
+            # Commande joueur, le premier caractère est la direction, le second
+            # le nombre de déplacement
             saisie = ""
             while len(saisie) != 1 and len(saisie) != 2:
                 saisie = input(const.PROMPT)
@@ -116,6 +119,5 @@ if __name__ == "__main__":
 
         elif reponse["type"] == const.SOCKET_SERVER_ANSWER_DISCONNECT:
             print(reponse["message"])
-
 
     close()

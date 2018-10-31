@@ -26,7 +26,7 @@ if __name__ == "__main__":
     connexion_principale.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     connexion_principale.bind((hote, port))
     connexion_principale.listen(5)
-    #print("Le serveur écoute à présent sur le port {}".format(port), file=sys.stdout)
+    # print("Le serveur écoute à présent sur le port {}".format(port), file=sys.stdout)
     print("On attend les clients.")
 
     serveur_lance = True
@@ -36,11 +36,11 @@ if __name__ == "__main__":
     while serveur_lance:
         # Gestion des nouvelles connexions
         # On attend 50ms maximum
-        connexions_demandees, wlist, xlist = select.select([connexion_principale], [], [], 0.05)
+        connexions_demandees, wlist, xlist = \
+            select.select([connexion_principale], [], [], 0.05)
 
         for connexion in connexions_demandees:
             socket, infos = connexion.accept()
-            
             # Ajout du client à la liste
             client = Client(socket)
             clients_connectes.append(client)
@@ -49,8 +49,9 @@ if __name__ == "__main__":
             client.send(const.SOCKET_SERVER_ASK_NAME, {}, "Votre nom:")
 
         # On attend 50ms maximum
-        # Si la liste de clients connectés est vide, une exception peut être levée
-        #TODO: est-il possible de récupérer directement les clients à lire ?
+        # Si la liste de clients connectés est vide, une exception peut être
+        # levée
+        # TODO: est-il possible de récupérer directement les clients à lire ?
         sockets_a_lire = []
         clients_a_lire = []
         try:
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
             for socket in sockets_a_lire:
                 for client in clients_connectes:
-                    if client.get_socket()==socket:
+                    if client.get_socket() == socket:
                         clients_a_lire.append(client)
 
         except select.error:
@@ -77,7 +78,8 @@ if __name__ == "__main__":
                     client.set_name(name)
                     game.labyrinthe.add_robot(name)
                     client.send(const.SOCKET_SERVER_MESSAGE, {}, "Bienvenue " + name)
-                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE, {}, name + " vient de se connecter.")
+                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE,
+                                       {}, name + " vient de se connecter.")
 
                 elif reponse["type"] == const.SOCKET_CLIENT_MOVE:
                     (direction, occurence) = reponse["infos"]
@@ -85,7 +87,8 @@ if __name__ == "__main__":
 
                     if returncode == const.RC_LAB_MOVE_ENDGAME:
                         client.send(const.SOCKET_SERVER_ASK_DISCONNECT, game.labyrinthe.to_dic(), const.STRING_CONGRATS)
-                        client.send_others(clients_connectes, const.SOCKET_SERVER_ASK_DISCONNECT, game.labyrinthe.to_dic(), client.get_name() + " a gagné !")
+                        client.send_others(clients_connectes, const.SOCKET_SERVER_ASK_DISCONNECT,
+                                           game.labyrinthe.to_dic(), client.get_name() + " a gagné !")
                     #     exit(0)
 
                     # On s'est prit un mur !
@@ -99,7 +102,8 @@ if __name__ == "__main__":
                 elif reponse["type"] == const.SOCKET_CLIENT_DISCONNECT:
                     print("Le client", client.get_name(), "nous a quitté")
                     client.send(const.SOCKET_SERVER_ANSWER_DISCONNECT, {}, "Au revoir "+client.get_name())
-                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE, {}, client.get_name() + " nous a quitté.")
+                    client.send_others(clients_connectes, const.SOCKET_SERVER_MESSAGE,
+                                       {}, client.get_name() + " nous a quitté.")
                     clients_a_lire.remove(client)
                     clients_connectes.remove(client)
                     client.disconnect()

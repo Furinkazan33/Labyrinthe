@@ -1,9 +1,6 @@
 # -*-coding:Utf-8 -*
 
-"""
-    Ce fichier contient les constantes du jeu.
-
-"""
+""" Ce fichier contient les constantes du jeu. """
 ##################################################
 # Diverses constantes
 ##################################################
@@ -16,18 +13,18 @@ PROMPT = "  >>"
 ##################################################
 # Les différents types de messages échangés
 ##################################################
-SOCKET_CLIENT_NAME              = "SOCKET_CLIENT_NAME"
-SOCKET_CLIENT_DISCONNECT        = "SOCKET_CLIENT_DISCONNECT"
-SOCKET_CLIENT_MOVE              = "SOCKET_CLIENT_MOVE"
+SOCKET_CLIENT_NAME = "SOCKET_CLIENT_NAME"
+SOCKET_CLIENT_DISCONNECT = "SOCKET_CLIENT_DISCONNECT"
+SOCKET_CLIENT_MOVE = "SOCKET_CLIENT_MOVE"
 
-SOCKET_SERVER_ASK_NAME          = "SOCKET_SERVER_ASK_NAME"
-SOCKET_SERVER_ASK_DISCONNECT    = "SOCKET_SERVER_ASK_DISCONNECT"
-SOCKET_SERVER_ASK_MOVE          = "SOCKET_SERVER_ASK_MOVE"
-SOCKET_SERVER_MESSAGE           = "SOCKET_SERVER_MESSAGE"
+SOCKET_SERVER_ASK_NAME = "SOCKET_SERVER_ASK_NAME"
+SOCKET_SERVER_ASK_DISCONNECT = "SOCKET_SERVER_ASK_DISCONNECT"
+SOCKET_SERVER_ASK_MOVE = "SOCKET_SERVER_ASK_MOVE"
+SOCKET_SERVER_MESSAGE = "SOCKET_SERVER_MESSAGE"
 
-SOCKET_SERVER_ANSWER_NAME       = "SOCKET_SERVER_ANSWER_NAME"
+SOCKET_SERVER_ANSWER_NAME = "SOCKET_SERVER_ANSWER_NAME"
 SOCKET_SERVER_ANSWER_DISCONNECT = "SOCKET_SERVER_ANSWER_DISCONNECT"
-SOCKET_SERVER_ANSWER_MOVE       = "SOCKET_SERVER_ANSWER_MOVE"
+SOCKET_SERVER_ANSWER_MOVE = "SOCKET_SERVER_ANSWER_MOVE"
 
 ##################################################
 # Messages affichés
@@ -60,7 +57,7 @@ CHAR_RIGHT = 'e'
 CHAR_OBSTACLE = 'O'
 CHAR_EXIT = 'U'
 CHAR_ROBOT = 'X'
-#TODO: à utiliser ?
+# TODO: à utiliser ?
 CHAR_DOOR = '.'
 
 ##################################################

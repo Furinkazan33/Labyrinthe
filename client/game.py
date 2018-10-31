@@ -1,10 +1,9 @@
+import const
 
 
 class Game():
-    self.grille = None
-    self.robots = []
-
-    
+    grille = None
+    robots = []
 
     def __repr__(self):
         """ Retourne le labyrinthe (grille + robots) sous forme de chaîne."""
@@ -17,9 +16,9 @@ class Game():
                     lab += const.CHAR_ROBOT
                 else:
                     lab += self.grille[l][c]
-                c+=1
+                c += 1
             lab += '\n'
-            c=0
-            l+=1
+            c = 0
+            l += 1
 
         return lab

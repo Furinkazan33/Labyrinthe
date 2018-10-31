@@ -5,12 +5,11 @@
 Il est utilisé par le serveur."""
 
 import os
-import sys
 import const
-from models import *
+from models import Labyrinthe
+
 
 class Game():
-
     maps = []
     labyrinthe = None
 
@@ -27,10 +26,9 @@ class Game():
 
         self.labyrinthe = Labyrinthe()
 
-    def get_maps (self):
+    def get_maps(self):
         """ Retourne une chaîne contenant la liste des cartes.
-            \"  {indice} - {repr(carte)}\"
-        """
+            \"  {indice} - {repr(carte)}\" """
 
         affichage = ""
 
@@ -47,6 +45,7 @@ class Game():
     # Boucle principale d'affichage du labyrinthe
     def move(self, name, direction, occurence):
         # Déplacement du robot
-        (name, returncode, x, y) = self.labyrinthe.move(name, direction, occurence)
+        (name, returncode, x, y) = \
+            self.labyrinthe.move(name, direction, occurence)
 
         return (name, returncode, x, y)
